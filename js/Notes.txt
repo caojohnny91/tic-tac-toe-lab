@@ -3,7 +3,7 @@ let board = ['', '', '', '', '', '', '', '', ''];
 // first '' = idx 0= top left sqr, 2nd '' = idx 1=top middle sqr, idx=3=middle left sqr
 
 let turn = x;
-// track whose turn it is, x = player x and o = player o
+// track whose turn it is, X = player X and O = player O
 
 let winner = false;
 // false winner means that theres no winner yet and true represents a player has won

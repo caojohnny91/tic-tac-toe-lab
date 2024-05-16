@@ -4,16 +4,16 @@
 
 /*---------------------------- Variables (state) ----------------------------*/
 
-let board = ['', '', '', '', '', '', '', '', ''];
+let board;
 // represents the state of the squares on the board
 
-let turn = x;
-// track whose turn it is, x = player x and o = player o
+let turn;
+// track whose turn it is, X = player X and O = player O
 
-let winner = false;
+let winner;
 // false winner means that theres no winner yet and true represents a player has won
 
-let tie = false;
+let tie;
 //A true value in tie will mean that the board array contains no more empty strings ('') and will be used to render a tie message if winner is still false by the time all squares are played.
 
 
@@ -31,26 +31,57 @@ const messageEl = document.querySelector('#message');
 
 
 
-
-
-
-
-
-
-
-
-
-
 /*-------------------------------- Functions --------------------------------*/
 
-function init () {
+const init = () => {
     // initialisation stuff here
+    board = [
+        '', '', '', 
+        '', '', '',
+        '', '', '',
+    ];
+    turn = 'X';
+    winner = false;
+    tie = false;
 }
 
-init();
+const render = () => {
+    updateBoard();
+    updateMessage();
+}
+
+const updateBoard = () => {
+    board.forEach((element, idx) => {
+        const squareEl = squareEls[idx]; // QUESTION did I do this right?
+        squareEl.textContent = element;
+        // if (value === 'X') {
+        //     squareEl.style.backgroundColor = 'black';
+        //     squareEl.style.color = 'white';
+        // } else if (value === 'O') {
+        //     squareEl.style.backgroundColor = 'black';
+        //     squareEl.style.color = 'red';
+        // } else {
+        //     squareEl.style.backgroundColor = 'white';
+        //     squareEl.style.color = 'black';
+        // }
+    });
+}
+
+const updateMessage = () => {
+    let render;
+    if (winner === false && value ===false) {
+        render = `It is play ${turn}'s turn!`;
+    } else if (winner === false || tie === true) {
+        render = "Its's a tie!";
+    } else {
+        render = `Player ${turn} is the WINNER!`;
+    }
+} // QUESTION do I need () after turn, tie, and winner?
+
 
 render();
 
+init(); // QUESTION need to call when app loads
 
 
 
