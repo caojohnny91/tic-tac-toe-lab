@@ -7,22 +7,26 @@ const winningCombos = [
     [1, 4, 7],
     [2, 5, 8],
     [0, 4, 8],
-    [2, 4, 6]
-]
+    [2, 4, 6],
+];
 
 
 /*---------------------------- Variables (state) ----------------------------*/
 
-let board;
+let board = [
+    '', '', '', 
+    '', '', '',
+    '', '', '',
+];
 // represents the state of the squares on the board
 
-let turn;
+let turn = 'X';
 // track whose turn it is, X = player X and O = player O
 
-let winner;
+let winner = false;
 // false winner means that theres no winner yet and true represents a player has won
 
-let tie;
+let tie = false;
 //A true value in tie will mean that the board array contains no more empty strings ('') and will be used to render a tie message if winner is still false by the time all squares are played.
 
 
@@ -34,7 +38,7 @@ const squareEls = document.querySelectorAll('.sqr');
 const messageEl = document.querySelector('#message');
 // console.log(messageEl);
 
-
+const resetBtnEl = document.querySelector('.reset');
 
 
 
@@ -43,7 +47,6 @@ const messageEl = document.querySelector('#message');
 /*-------------------------------- Functions --------------------------------*/
 
 const init = () => {
-    // initialisation stuff here
     board = [
         '', '', '', 
         '', '', '',
@@ -52,58 +55,101 @@ const init = () => {
     turn = 'X';
     winner = false;
     tie = false;
-}
+    render();
+};
 
 const render = () => {
     updateBoard();
     updateMessage();
-}
+};
 
 const updateBoard = () => {
     board.forEach((element, idx) => {
-        const squareEl = squareEls[idx]; // QUESTION did I do this right?
+        const squareEl = squareEls[idx];
         squareEl.textContent = element;
-        // if (value === 'X') {
-        //     squareEl.style.backgroundColor = 'black';
-        //     squareEl.style.color = 'white';
-        // } else if (value === 'O') {
-        //     squareEl.style.backgroundColor = 'black';
-        //     squareEl.style.color = 'red';
-        // } else {
-        //     squareEl.style.backgroundColor = 'white';
-        //     squareEl.style.color = 'black';
-        // }
     });
-}
+};
 
 const updateMessage = () => {
     let render;
-    if (winner === false && value ===false) {
+    if (winner === false && tie ===false) {
         render = `It is play ${turn}'s turn!`;
     } else if (winner === false || tie === true) {
         render = "Its's a tie!";
     } else {
         render = `Player ${turn} is the WINNER!`;
     }
-} // QUESTION do I need () after turn, tie, and winner?
+
+    messageEl.textContent = render;
+};
+
+const handleClick = (event) => {
+    const squareIndex = event.target.id
+    if (board[squareIndex] === "X" || board[squareIndex] === "O") return
+    if (winner === true) return
+    placePiece(squareIndex)
+    checkForWinner()
+    checkForTie()
+    switchPlayerTurn()
+    render()
+    // updateMessage()
+};
 
 
-render();
+const placePiece = (index) => {
+    if (turn === 'X') {
+        board[index] = 'X';
+        // turn = 'O';
+    } else {
+        board[index] = 'O';
+        // turn = 'X';
+    }
+    console.log(board[index]);
+    // updateBoard();
+};
 
-init(); // QUESTION need to call when app loads
+const checkForWinner = () => {
+    winningCombos.forEach((win) => {
+        if (board[win[0]] != '' 
+        && board[win[0]] === board[win[1]] 
+        && board[win[1]] === board[win[2]]) {
+           winner = true 
+        }
+    })
+};
+
+const checkForTie = () => {
+    if (winner == true) return;
+    if (board.includes('')) {
+        tie = false;
+    } else {
+        tie = true;
+    }
+}
+
+const switchPlayerTurn = () => {
+    if(winner == true) return
+    if (winner == false && turn == 'X') {
+        turn = 'O'
+    } else if (winner == false && turn == "O") {
+        turn = 'X'
+    }
+}
 
 
 
-
-
-
-
-
-
+init();
 
 
 
 /*----------------------------- Event Listeners -----------------------------*/
+
+squareEls.forEach((square) =>{
+    square.addEventListener('click', handleClick);
+});
+
+resetBtnEl.addEventListener('click', init);
+
 
 
 
